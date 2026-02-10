@@ -1,0 +1,7 @@
+project_id = "efnvvakomsyypmalfrba"
+
+[functions.ai-interview]
+verify_jwt = false
+
+[functions.ai-resume]
+verify_jwt = false

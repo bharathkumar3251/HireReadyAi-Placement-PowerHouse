@@ -19,7 +19,7 @@ export default function Index() {
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
           <div className="flex items-center gap-2">
             <Zap className="h-6 w-6 text-primary" />
-            <span className="text-lg font-display font-bold text-foreground">Placement Powerhouse</span>
+            <span className="text-lg font-display font-bold text-foreground">HireReadyAI</span>
           </div>
           <div className="flex items-center gap-3">
             <Link to="/auth">
@@ -103,7 +103,7 @@ export default function Index() {
         <div className="container mx-auto flex items-center justify-between text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Zap className="h-4 w-4 text-primary" />
-            <span className="font-display font-semibold">Placement Powerhouse</span>
+            <span className="font-display font-semibold">HireReadyAI</span>
           </div>
           <p>&copy; {new Date().getFullYear()} All rights reserved.</p>
         </div>

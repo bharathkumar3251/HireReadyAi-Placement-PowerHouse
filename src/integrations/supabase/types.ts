@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      candidate_decisions: {
+        Row: {
+          created_at: string
+          decision: string
+          id: string
+          notes: string | null
+          recruiter_id: string
+          student_user_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          decision: string
+          id?: string
+          notes?: string | null
+          recruiter_id: string
+          student_user_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          decision?: string
+          id?: string
+          notes?: string | null
+          recruiter_id?: string
+          student_user_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       feedback_reports: {
         Row: {
           created_at: string

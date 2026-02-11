@@ -15,6 +15,8 @@ import Profile from "./pages/Profile";
 import RecruiterStudents from "./pages/RecruiterStudents";
 import RecruiterJobs from "./pages/RecruiterJobs";
 import AdminUsers from "./pages/AdminUsers";
+import AdminAnalytics from "./pages/AdminAnalytics";
+import AdminSettings from "./pages/AdminSettings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,8 +46,8 @@ const App = () => (
             <Route path="/recruiter/students" element={<ProtectedRoute allowedRoles={["recruiter", "admin"]}><RecruiterStudents /></ProtectedRoute>} />
             <Route path="/recruiter/jobs" element={<ProtectedRoute allowedRoles={["recruiter"]}><RecruiterJobs /></ProtectedRoute>} />
             <Route path="/admin/users" element={<ProtectedRoute allowedRoles={["admin"]}><AdminUsers /></ProtectedRoute>} />
-            <Route path="/admin/analytics" element={<ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute>} />
-            <Route path="/admin/settings" element={<ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute>} />
+            <Route path="/admin/analytics" element={<ProtectedRoute allowedRoles={["admin"]}><AdminAnalytics /></ProtectedRoute>} />
+            <Route path="/admin/settings" element={<ProtectedRoute allowedRoles={["admin"]}><AdminSettings /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

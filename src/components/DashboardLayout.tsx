@@ -53,7 +53,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-card border-r border-border flex flex-col transform transition-transform lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="flex items-center gap-2 p-5 border-b border-border">
           <Zap className="h-6 w-6 text-primary" />
-          <span className="text-lg font-display font-bold text-foreground">Placement Powerhouse</span>
+          <span className="text-lg font-display font-bold text-foreground">HireReadyAI</span>
         </div>
 
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">

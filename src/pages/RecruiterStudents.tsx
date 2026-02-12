@@ -31,6 +31,16 @@ interface InterviewStats {
   avgScore: number;
 }
 
+interface CodingStats {
+  solved: number;
+  avgScore: number;
+}
+
+interface AptitudeStats {
+  tests: number;
+  avgScore: number;
+}
+
 interface Decision {
   decision: string;
   notes: string | null;
@@ -41,6 +51,8 @@ export default function RecruiterStudents() {
   const { toast } = useToast();
   const [profiles, setProfiles] = useState<StudentProfile[]>([]);
   const [interviewStats, setInterviewStats] = useState<Record<string, InterviewStats>>({});
+  const [codingStats, setCodingStats] = useState<Record<string, CodingStats>>({});
+  const [aptitudeStats, setAptitudeStats] = useState<Record<string, AptitudeStats>>({});
   const [resumeCounts, setResumeCounts] = useState<Record<string, number>>({});
   const [decisions, setDecisions] = useState<Record<string, Decision>>({});
   const [search, setSearch] = useState("");
@@ -55,11 +67,13 @@ export default function RecruiterStudents() {
     if (!user) return;
     const fetchAll = async () => {
       setLoading(true);
-      const [profilesRes, sessionsRes, resumesRes, decisionsRes] = await Promise.all([
+      const [profilesRes, sessionsRes, resumesRes, decisionsRes, codingRes, aptitudeRes] = await Promise.all([
         supabase.from("profiles").select("*").order("created_at", { ascending: false }),
         supabase.from("interview_sessions").select("user_id, overall_score, status"),
         supabase.from("resumes").select("user_id"),
         supabase.from("candidate_decisions").select("*").eq("recruiter_id", user.id),
+        supabase.from("coding_submissions").select("user_id, score, status"),
+        supabase.from("aptitude_sessions").select("user_id, score, status").eq("status", "completed"),
       ]);
 
       setProfiles(profilesRes.data || []);
@@ -91,6 +105,27 @@ export default function RecruiterStudents() {
         decMap[d.student_user_id] = { decision: d.decision, notes: d.notes };
       });
       setDecisions(decMap);
+
+      // Coding stats
+      const codingMap: Record<string, CodingStats> = {};
+      (codingRes.data || []).forEach((c: any) => {
+        if (!codingMap[c.user_id]) codingMap[c.user_id] = { solved: 0, avgScore: 0 };
+        if (c.status === "accepted") codingMap[c.user_id].solved++;
+        codingMap[c.user_id].avgScore = c.score || 0;
+      });
+      setCodingStats(codingMap);
+
+      // Aptitude stats
+      const aptMap: Record<string, AptitudeStats> = {};
+      ((aptitudeRes.data as any[]) || []).forEach((a: any) => {
+        if (!aptMap[a.user_id]) aptMap[a.user_id] = { tests: 0, avgScore: 0 };
+        aptMap[a.user_id].tests++;
+        aptMap[a.user_id].avgScore = Math.round(
+          ((aptMap[a.user_id].avgScore * (aptMap[a.user_id].tests - 1)) + (a.score || 0)) / aptMap[a.user_id].tests
+        );
+      });
+      setAptitudeStats(aptMap);
+
       setLoading(false);
     };
     fetchAll();
@@ -98,12 +133,16 @@ export default function RecruiterStudents() {
 
   const getReadinessScore = (uid: string) => {
     const stats = interviewStats[uid];
+    const coding = codingStats[uid];
+    const aptitude = aptitudeStats[uid];
     const hasResume = (resumeCounts[uid] || 0) > 0;
-    if (!stats) return hasResume ? 20 : 0;
-    const interviewScore = Math.min(stats.avgScore, 100);
-    const resumeBonus = hasResume ? 20 : 0;
-    const practiceBonus = Math.min(stats.count * 10, 30);
-    return Math.min(interviewScore * 0.5 + resumeBonus + practiceBonus, 100);
+    if (!stats && !coding && !aptitude) return hasResume ? 10 : 0;
+    const interviewScore = stats ? Math.min(stats.avgScore, 100) * 0.3 : 0;
+    const codingScore = coding ? Math.min(coding.avgScore, 100) * 0.3 : 0;
+    const aptitudeScore = aptitude ? Math.min(aptitude.avgScore, 100) * 0.2 : 0;
+    const resumeBonus = hasResume ? 10 : 0;
+    const practiceBonus = stats ? Math.min(stats.count * 5, 10) : 0;
+    return Math.min(Math.round(interviewScore + codingScore + aptitudeScore + resumeBonus + practiceBonus), 100);
   };
 
   const allSkills = [...new Set(profiles.flatMap(p => p.skills || []))].sort();
@@ -297,14 +336,22 @@ export default function RecruiterStudents() {
                         {/* Stats */}
                         <div className="space-y-2">
                           <h4 className="text-sm font-semibold text-foreground">Performance</h4>
-                          <div className="flex items-center gap-4">
+                          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                             <div>
                               <p className="text-2xl font-bold text-foreground">{score}%</p>
                               <p className="text-xs text-muted-foreground">Readiness</p>
                             </div>
                             <div>
                               <p className="text-2xl font-bold text-foreground">{stats?.avgScore || "—"}</p>
-                              <p className="text-xs text-muted-foreground">Avg Interview</p>
+                              <p className="text-xs text-muted-foreground">Interview</p>
+                            </div>
+                            <div>
+                              <p className="text-2xl font-bold text-foreground">{codingStats[p.user_id]?.avgScore || "—"}</p>
+                              <p className="text-xs text-muted-foreground">Coding</p>
+                            </div>
+                            <div>
+                              <p className="text-2xl font-bold text-foreground">{aptitudeStats[p.user_id]?.avgScore || "—"}%</p>
+                              <p className="text-xs text-muted-foreground">Aptitude</p>
                             </div>
                             <div>
                               <p className="text-2xl font-bold text-foreground">{resumeCounts[p.user_id] || 0}</p>

@@ -14,6 +14,84 @@ export type Database = {
   }
   public: {
     Tables: {
+      aptitude_questions: {
+        Row: {
+          category: string
+          correct_answer: number
+          created_at: string
+          created_by: string | null
+          difficulty: string
+          explanation: string | null
+          id: string
+          options: Json
+          question: string
+        }
+        Insert: {
+          category?: string
+          correct_answer?: number
+          created_at?: string
+          created_by?: string | null
+          difficulty?: string
+          explanation?: string | null
+          id?: string
+          options?: Json
+          question: string
+        }
+        Update: {
+          category?: string
+          correct_answer?: number
+          created_at?: string
+          created_by?: string | null
+          difficulty?: string
+          explanation?: string | null
+          id?: string
+          options?: Json
+          question?: string
+        }
+        Relationships: []
+      }
+      aptitude_sessions: {
+        Row: {
+          answers: Json | null
+          category: string
+          completed_at: string | null
+          correct_answers: number
+          created_at: string
+          id: string
+          score: number
+          status: string
+          time_taken_seconds: number | null
+          total_questions: number
+          user_id: string
+        }
+        Insert: {
+          answers?: Json | null
+          category?: string
+          completed_at?: string | null
+          correct_answers?: number
+          created_at?: string
+          id?: string
+          score?: number
+          status?: string
+          time_taken_seconds?: number | null
+          total_questions?: number
+          user_id: string
+        }
+        Update: {
+          answers?: Json | null
+          category?: string
+          completed_at?: string | null
+          correct_answers?: number
+          created_at?: string
+          id?: string
+          score?: number
+          status?: string
+          time_taken_seconds?: number | null
+          total_questions?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       candidate_decisions: {
         Row: {
           created_at: string
@@ -43,6 +121,101 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      coding_problems: {
+        Row: {
+          category: string
+          constraints: string | null
+          created_at: string
+          created_by: string | null
+          description: string
+          difficulty: string
+          hidden_test_cases: Json
+          hints: string[] | null
+          id: string
+          starter_code: Json
+          test_cases: Json
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          constraints?: string | null
+          created_at?: string
+          created_by?: string | null
+          description: string
+          difficulty?: string
+          hidden_test_cases?: Json
+          hints?: string[] | null
+          id?: string
+          starter_code?: Json
+          test_cases?: Json
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          constraints?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          difficulty?: string
+          hidden_test_cases?: Json
+          hints?: string[] | null
+          id?: string
+          starter_code?: Json
+          test_cases?: Json
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      coding_submissions: {
+        Row: {
+          code: string
+          created_at: string
+          execution_time_ms: number | null
+          id: string
+          language: string
+          problem_id: string
+          score: number | null
+          status: string
+          test_results: Json | null
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          execution_time_ms?: number | null
+          id?: string
+          language?: string
+          problem_id: string
+          score?: number | null
+          status?: string
+          test_results?: Json | null
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          execution_time_ms?: number | null
+          id?: string
+          language?: string
+          problem_id?: string
+          score?: number | null
+          status?: string
+          test_results?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coding_submissions_problem_id_fkey"
+            columns: ["problem_id"]
+            isOneToOne: false
+            referencedRelation: "coding_problems"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       feedback_reports: {
         Row: {

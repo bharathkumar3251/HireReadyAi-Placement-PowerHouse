@@ -3,7 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   Zap, LayoutDashboard, FileText, Mic, BookOpen, Briefcase, Users,
-  Settings, LogOut, Menu, X, ChevronRight, BarChart3, UserCircle
+  Settings, LogOut, Menu, X, ChevronRight, BarChart3, UserCircle,
+  Code, Brain, Award
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -11,7 +12,10 @@ const studentLinks = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/resume-builder", icon: FileText, label: "Resume Builder" },
   { to: "/mock-interview", icon: Mic, label: "AI Interview" },
+  { to: "/coding", icon: Code, label: "Coding Challenge" },
+  { to: "/aptitude", icon: Brain, label: "Aptitude Test" },
   { to: "/practice", icon: BookOpen, label: "Practice" },
+  { to: "/resume-generator", icon: Award, label: "Placement Resume" },
   { to: "/profile", icon: UserCircle, label: "Profile" },
 ];
 

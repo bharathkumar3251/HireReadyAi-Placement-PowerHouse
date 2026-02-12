@@ -2,23 +2,25 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Users, Briefcase, FileText, CheckCircle, XCircle, Star, TrendingUp } from "lucide-react";
+import { Users, Briefcase, FileText, CheckCircle, XCircle, Star, TrendingUp, Code, Brain } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
 export default function RecruiterDashboard() {
   const { user } = useAuth();
-  const [stats, setStats] = useState({ students: 0, resumes: 0, jobs: 0, shortlisted: 0, selected: 0, rejected: 0 });
+  const [stats, setStats] = useState({ students: 0, resumes: 0, jobs: 0, shortlisted: 0, selected: 0, rejected: 0, codingSubmissions: 0, aptitudeSessions: 0 });
   const [recentDecisions, setRecentDecisions] = useState<any[]>([]);
 
   useEffect(() => {
     if (!user) return;
     const fetchData = async () => {
-      const [profilesRes, resumesRes, jobsRes, decisionsRes, recentRes] = await Promise.all([
+      const [profilesRes, resumesRes, jobsRes, decisionsRes, recentRes, codingRes, aptitudeRes] = await Promise.all([
         supabase.from("profiles").select("id", { count: "exact", head: true }),
         supabase.from("resumes").select("id", { count: "exact", head: true }),
         supabase.from("job_listings").select("id", { count: "exact", head: true }).eq("recruiter_id", user.id),
         supabase.from("candidate_decisions").select("decision").eq("recruiter_id", user.id),
         supabase.from("candidate_decisions").select("*").eq("recruiter_id", user.id).order("updated_at", { ascending: false }).limit(5),
+        supabase.from("coding_submissions").select("id", { count: "exact", head: true }),
+        supabase.from("aptitude_sessions").select("id", { count: "exact", head: true }).eq("status", "completed"),
       ]);
 
       const decs = decisionsRes.data || [];
@@ -29,6 +31,8 @@ export default function RecruiterDashboard() {
         shortlisted: decs.filter(d => d.decision === "shortlisted").length,
         selected: decs.filter(d => d.decision === "selected").length,
         rejected: decs.filter(d => d.decision === "rejected").length,
+        codingSubmissions: codingRes.count || 0,
+        aptitudeSessions: aptitudeRes.count || 0,
       });
       setRecentDecisions(recentRes.data || []);
     };
@@ -45,6 +49,8 @@ export default function RecruiterDashboard() {
     { icon: Users, label: "Total Students", value: stats.students, color: "primary" },
     { icon: FileText, label: "Resumes Available", value: stats.resumes, color: "info" },
     { icon: Briefcase, label: "My Job Listings", value: stats.jobs, color: "success" },
+    { icon: Code, label: "Code Submissions", value: stats.codingSubmissions, color: "warning" },
+    { icon: Brain, label: "Aptitude Tests", value: stats.aptitudeSessions, color: "primary" },
     { icon: Star, label: "Shortlisted", value: stats.shortlisted, color: "warning" },
     { icon: CheckCircle, label: "Selected", value: stats.selected, color: "success" },
     { icon: XCircle, label: "Rejected", value: stats.rejected, color: "destructive" },
@@ -52,7 +58,7 @@ export default function RecruiterDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
         {statCards.map(({ icon: Icon, label, value, color }) => (
           <div key={label} className="glass-card p-4">
             <div className={`p-2 rounded-lg bg-${color}/10 w-fit mb-2`}>

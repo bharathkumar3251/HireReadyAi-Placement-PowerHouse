@@ -5,3 +5,12 @@ verify_jwt = false
 
 [functions.ai-resume]
 verify_jwt = false
+
+[functions.evaluate-code]
+verify_jwt = false
+
+[functions.generate-aptitude]
+verify_jwt = false
+
+[functions.generate-coding-problems]
+verify_jwt = false

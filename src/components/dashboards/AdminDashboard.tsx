@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Users, Mic, FileText, Briefcase, BarChart3, Award, TrendingUp } from "lucide-react";
+import { Users, Mic, FileText, Briefcase, BarChart3, Award, TrendingUp, Code, Brain } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 interface DeptStat {
@@ -11,14 +11,14 @@ interface DeptStat {
 }
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState({ users: 0, interviews: 0, resumes: 0, jobs: 0, decisions: 0 });
+  const [stats, setStats] = useState({ users: 0, interviews: 0, resumes: 0, jobs: 0, decisions: 0, codingProblems: 0, aptitudeTests: 0 });
   const [deptStats, setDeptStats] = useState<DeptStat[]>([]);
   const [topPerformers, setTopPerformers] = useState<any[]>([]);
   const [roleDistribution, setRoleDistribution] = useState<{ name: string; value: number }[]>([]);
 
   useEffect(() => {
     const fetchAll = async () => {
-      const [profilesRes, interviewsRes, resumesRes, jobsRes, decisionsRes, rolesRes, sessionsRes] = await Promise.all([
+      const [profilesRes, interviewsRes, resumesRes, jobsRes, decisionsRes, rolesRes, sessionsRes, codingRes, aptitudeRes] = await Promise.all([
         supabase.from("profiles").select("*"),
         supabase.from("interview_sessions").select("id", { count: "exact", head: true }),
         supabase.from("resumes").select("id", { count: "exact", head: true }),
@@ -26,6 +26,8 @@ export default function AdminDashboard() {
         supabase.from("candidate_decisions").select("id", { count: "exact", head: true }),
         supabase.from("user_roles").select("role"),
         supabase.from("interview_sessions").select("user_id, overall_score").not("overall_score", "is", null),
+        supabase.from("coding_problems").select("id", { count: "exact", head: true }),
+        supabase.from("aptitude_sessions").select("id", { count: "exact", head: true }).eq("status", "completed"),
       ]);
 
       const profiles = profilesRes.data || [];
@@ -35,6 +37,8 @@ export default function AdminDashboard() {
         resumes: resumesRes.count || 0,
         jobs: jobsRes.count || 0,
         decisions: decisionsRes.count || 0,
+        codingProblems: codingRes.count || 0,
+        aptitudeTests: aptitudeRes.count || 0,
       });
 
       // Role distribution
@@ -96,6 +100,8 @@ export default function AdminDashboard() {
     { icon: Users, label: "Total Users", value: stats.users, color: "primary" },
     { icon: Mic, label: "Interviews", value: stats.interviews, color: "info" },
     { icon: FileText, label: "Resumes", value: stats.resumes, color: "success" },
+    { icon: Code, label: "Coding Problems", value: stats.codingProblems, color: "warning" },
+    { icon: Brain, label: "Aptitude Tests", value: stats.aptitudeTests, color: "primary" },
     { icon: Briefcase, label: "Job Listings", value: stats.jobs, color: "warning" },
     { icon: Award, label: "Decisions", value: stats.decisions, color: "primary" },
   ];
@@ -103,7 +109,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       {/* Stat cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
         {statCards.map(({ icon: Icon, label, value, color }) => (
           <div key={label} className="glass-card p-4">
             <div className={`p-2 rounded-lg bg-${color}/10 w-fit mb-2`}>

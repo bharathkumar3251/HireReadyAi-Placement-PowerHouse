@@ -17,6 +17,9 @@ import RecruiterJobs from "./pages/RecruiterJobs";
 import AdminUsers from "./pages/AdminUsers";
 import AdminAnalytics from "./pages/AdminAnalytics";
 import AdminSettings from "./pages/AdminSettings";
+import CodingChallenge from "./pages/CodingChallenge";
+import AptitudeTest from "./pages/AptitudeTest";
+import ResumeGenerator from "./pages/ResumeGenerator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +45,9 @@ const App = () => (
             <Route path="/resume-builder" element={<ProtectedRoute allowedRoles={["student"]}><ResumeBuilder /></ProtectedRoute>} />
             <Route path="/mock-interview" element={<ProtectedRoute allowedRoles={["student"]}><MockInterview /></ProtectedRoute>} />
             <Route path="/practice" element={<ProtectedRoute allowedRoles={["student"]}><Practice /></ProtectedRoute>} />
+            <Route path="/coding" element={<ProtectedRoute allowedRoles={["student"]}><CodingChallenge /></ProtectedRoute>} />
+            <Route path="/aptitude" element={<ProtectedRoute allowedRoles={["student"]}><AptitudeTest /></ProtectedRoute>} />
+            <Route path="/resume-generator" element={<ProtectedRoute allowedRoles={["student"]}><ResumeGenerator /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/recruiter/students" element={<ProtectedRoute allowedRoles={["recruiter", "admin"]}><RecruiterStudents /></ProtectedRoute>} />
             <Route path="/recruiter/jobs" element={<ProtectedRoute allowedRoles={["recruiter"]}><RecruiterJobs /></ProtectedRoute>} />

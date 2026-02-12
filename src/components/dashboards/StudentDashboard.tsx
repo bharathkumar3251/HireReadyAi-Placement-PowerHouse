@@ -2,31 +2,35 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { FileText, Mic, BookOpen, TrendingUp, Clock, Award } from "lucide-react";
+import { FileText, Mic, BookOpen, TrendingUp, Clock, Award, Code, Brain } from "lucide-react";
 
 export default function StudentDashboard() {
   const { user } = useAuth();
-  const [stats, setStats] = useState({ resumes: 0, interviews: 0, avgScore: 0 });
+  const [stats, setStats] = useState({ resumes: 0, interviews: 0, avgScore: 0, codingSolved: 0, aptitudeAvg: 0 });
   const [recentSessions, setRecentSessions] = useState<any[]>([]);
 
   useEffect(() => {
     if (!user) return;
 
     const fetchData = async () => {
-      const [resumeRes, interviewRes] = await Promise.all([
+      const [resumeRes, interviewRes, codingRes, aptitudeRes] = await Promise.all([
         supabase.from("resumes").select("id", { count: "exact", head: true }).eq("user_id", user.id),
         supabase.from("interview_sessions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(5),
+        supabase.from("coding_submissions").select("status, score").eq("user_id", user.id),
+        supabase.from("aptitude_sessions").select("score").eq("user_id", user.id).eq("status", "completed"),
       ]);
 
       const sessions = interviewRes.data || [];
       const completed = sessions.filter(s => s.overall_score);
       const avg = completed.length ? Math.round(completed.reduce((a, b) => a + (b.overall_score || 0), 0) / completed.length) : 0;
 
-      setStats({
-        resumes: resumeRes.count || 0,
-        interviews: sessions.length,
-        avgScore: avg,
-      });
+      const coding = codingRes.data || [];
+      const codingSolved = new Set(coding.filter(c => c.status === "accepted")).size;
+
+      const aptitude = (aptitudeRes.data as any[]) || [];
+      const aptitudeAvg = aptitude.length ? Math.round(aptitude.reduce((a: number, b: any) => a + (b.score || 0), 0) / aptitude.length) : 0;
+
+      setStats({ resumes: resumeRes.count || 0, interviews: sessions.length, avgScore: avg, codingSolved, aptitudeAvg });
       setRecentSessions(sessions);
     };
     fetchData();
@@ -34,14 +38,17 @@ export default function StudentDashboard() {
 
   const quickActions = [
     { to: "/resume-builder", icon: FileText, label: "Build Resume", color: "text-info" },
-    { to: "/mock-interview", icon: Mic, label: "Start Interview", color: "text-primary" },
-    { to: "/practice", icon: BookOpen, label: "Practice Questions", color: "text-success" },
+    { to: "/mock-interview", icon: Mic, label: "AI Interview", color: "text-primary" },
+    { to: "/coding", icon: Code, label: "Coding Challenge", color: "text-warning" },
+    { to: "/aptitude", icon: Brain, label: "Aptitude Test", color: "text-success" },
+    { to: "/practice", icon: BookOpen, label: "Practice", color: "text-info" },
+    { to: "/resume-generator", icon: Award, label: "Placement Resume", color: "text-primary" },
   ];
 
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
         <div className="glass-card p-5">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-primary/10"><FileText className="h-5 w-5 text-primary" /></div>
@@ -69,13 +76,31 @@ export default function StudentDashboard() {
             </div>
           </div>
         </div>
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-warning/10"><Code className="h-5 w-5 text-warning" /></div>
+            <div>
+              <p className="text-2xl font-display font-bold text-foreground">{stats.codingSolved}</p>
+              <p className="text-sm text-muted-foreground">Code Solved</p>
+            </div>
+          </div>
+        </div>
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-primary/10"><Brain className="h-5 w-5 text-primary" /></div>
+            <div>
+              <p className="text-2xl font-display font-bold text-foreground">{stats.aptitudeAvg || "—"}%</p>
+              <p className="text-sm text-muted-foreground">Aptitude</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {quickActions.map(({ to, icon: Icon, label, color }) => (
           <Link key={to} to={to} className="glass-card p-5 hover-lift flex items-center gap-4 group">
-            <div className={`p-3 rounded-xl bg-muted group-hover:bg-primary/10 transition-colors`}>
+            <div className="p-3 rounded-xl bg-muted group-hover:bg-primary/10 transition-colors">
               <Icon className={`h-6 w-6 ${color}`} />
             </div>
             <div>

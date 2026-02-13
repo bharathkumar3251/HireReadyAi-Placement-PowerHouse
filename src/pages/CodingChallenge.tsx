@@ -103,7 +103,8 @@ export default function CodingChallenge() {
         body: JSON.stringify({ category: categoryFilter, difficulty: difficultyFilter, count: 3 }),
       });
       const data = await response.json();
-      if (data.problems?.length) {
+      const problems = data.problems || [];
+      if (problems.length > 0) {
         for (const p of data.problems) {
           await supabase.from("coding_problems").insert({
             title: p.title,

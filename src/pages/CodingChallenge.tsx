@@ -102,27 +102,47 @@ export default function CodingChallenge() {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
         body: JSON.stringify({ category: categoryFilter, difficulty: difficultyFilter, count: 3 }),
       });
+      
+      if (!response.ok) {
+        throw new Error(`Server returned ${response.status}`);
+      }
+      
       const data = await response.json();
-      const problems = data.problems || [];
-      if (problems.length > 0) {
-        for (const p of data.problems) {
-          await supabase.from("coding_problems").insert({
-            title: p.title,
-            description: p.description,
-            category: p.category || categoryFilter,
-            difficulty: p.difficulty || difficultyFilter,
-            starter_code: p.starterCode || {},
-            test_cases: p.testCases || [],
-            hidden_test_cases: p.hiddenTestCases || [],
-            constraints: p.constraints,
-            hints: p.hints || [],
-          });
-        }
-        toast({ title: `${data.problems.length} problems generated!` });
+      const generatedProblems = Array.isArray(data?.problems) ? data.problems : [];
+      
+      if (generatedProblems.length === 0) {
+        toast({ title: "No problems generated", description: "Please try again.", variant: "destructive" });
+        setGenerating(false);
+        return;
+      }
+      
+      let insertedCount = 0;
+      for (const p of generatedProblems) {
+        if (!p.title || !p.description) continue;
+        const { error } = await supabase.from("coding_problems").insert({
+          title: p.title,
+          description: p.description,
+          category: p.category || categoryFilter,
+          difficulty: p.difficulty || difficultyFilter,
+          starter_code: p.starterCode || p.starter_code || {},
+          test_cases: p.testCases || p.test_cases || [],
+          hidden_test_cases: p.hiddenTestCases || p.hidden_test_cases || [],
+          constraints: p.constraints || null,
+          hints: p.hints || [],
+        });
+        if (!error) insertedCount++;
+        else console.error("Insert error:", error);
+      }
+      
+      if (insertedCount > 0) {
+        toast({ title: `${insertedCount} problems generated!` });
         fetchProblems();
+      } else {
+        toast({ title: "Failed to save problems", description: "Check your permissions.", variant: "destructive" });
       }
     } catch (err: any) {
-      toast({ title: "Generation failed", description: err.message, variant: "destructive" });
+      console.error("Generation error:", err);
+      toast({ title: "Generation failed", description: err.message || "Unknown error", variant: "destructive" });
     }
     setGenerating(false);
   };

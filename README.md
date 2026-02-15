@@ -1,73 +1,141 @@
-# Welcome to your Lovable project
+HireReadyAI – AI Powered Placement Intelligence Platform
+👥 Team Members
 
-## Project info
+Bharath Kumar S
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Deepak MS
 
-## How can I edit this code?
+Deepalakshmi S
 
-There are several ways of editing your application.
+📌 Project Overview
 
-**Use Lovable**
+HireReadyAI is an AI-driven Placement Intelligence Platform designed to bridge the gap between academic preparation and real-world hiring requirements.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+The platform helps students assess and improve their interview readiness through coding challenges, aptitude assessments, AI mock interviews, and automated resume generation. It also provides recruiters and placement administrators with analytics dashboards to make data-driven decisions.
 
-Changes made via Lovable will be committed automatically to this repo.
+🎯 Problem Statement
 
-**Use your preferred IDE**
+Many students attend interviews without structured preparation or measurable readiness.
+Placement officers manually filter candidates without real performance analytics.
+Recruiters spend significant time screening candidates.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+There is no unified platform that combines:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Coding evaluation
 
-Follow these steps:
+Aptitude assessment
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+AI mock interviews
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Resume generation
 
-# Step 3: Install the necessary dependencies.
-npm i
+Performance analytics
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+💡 Our Solution
 
-**Edit a file directly in GitHub**
+HireReadyAI provides a complete ecosystem for placement preparation and candidate evaluation.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+🔹 Student Portal
 
-**Use GitHub Codespaces**
+AI-based readiness dashboard
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Coding challenge system (Easy to Hard)
 
-## What technologies are used for this project?
+Aptitude & logical reasoning tests
 
-This project is built with:
+AI-powered mock interview
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Automatic scoring & feedback
 
-## How can I deploy this project?
+Resume builder with PDF export
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Final eligibility status (Pass / Needs Improvement)
 
-## Can I connect a custom domain to my Lovable project?
+🔹 Admin Dashboard
 
-Yes, you can!
+Student performance analytics
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Coding & aptitude tracking
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Interview evaluation reports
+
+Department-wise insights
+
+Shortlisting tools
+
+🔹 Recruiter Panel
+
+Candidate overview
+
+Interview performance summary
+
+Resume preview & download
+
+Smart filtering system
+
+🧠 Key Features
+
+🔥 Live Coding Challenge System
+
+⏱️ Timer-based Aptitude Test
+
+🤖 AI Mock Interview Simulation
+
+📊 Performance Analytics Dashboard
+
+📄 Auto-Generated Resume PDF
+
+🎯 Placement Eligibility Status
+
+🔐 Secure Authentication
+
+🏗️ Tech Stack
+Frontend
+
+React.js
+
+Tailwind CSS
+
+Modern Dashboard UI
+
+Backend
+
+Node.js / Express
+
+REST APIs
+
+Database
+
+Firebase / MongoDB
+
+Additional Integrations
+
+AI APIs for interview evaluation
+
+Code execution sandbox
+
+PDF generation system
+
+📈 Impact
+
+🎓 Students receive measurable interview readiness scores
+
+🏫 Colleges gain placement analytics
+
+🧑‍💼 Recruiters save screening time
+
+📊 Data-driven hiring insights
+
+🔮 Future Enhancements
+
+AI-based job role recommendation
+
+Company-specific coding patterns
+
+Voice emotion analysis in interviews
+
+Blockchain-based certification
+
+🏆 Hackathon Submission
+
+HireReadyAI demonstrates how AI can transform traditional placement processes into intelligent, automated, and scalable systems

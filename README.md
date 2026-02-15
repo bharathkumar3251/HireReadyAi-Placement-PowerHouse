@@ -7,6 +7,8 @@ Deepak MS
 
 Deepalakshmi S
 
+Atchaya E
+
 📌 Project Overview
 
 HireReadyAI is an AI-driven Placement Intelligence Platform designed to bridge the gap between academic preparation and real-world hiring requirements.

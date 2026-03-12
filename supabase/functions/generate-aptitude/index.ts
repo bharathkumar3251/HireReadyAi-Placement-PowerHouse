@@ -155,7 +155,8 @@ Respond ONLY with valid JSON array:
     });
   } catch (error) {
     console.error("Function error:", error);
-    return new Response(JSON.stringify({ error: error.message, questions: [] }), {
+    const msg = error instanceof Error ? error.message : "Unknown error";
+    return new Response(JSON.stringify({ error: msg, questions: [] }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

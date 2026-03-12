@@ -75,24 +75,23 @@ serve(async (req) => {
   }
 
   try {
-    const { category, difficulty, count = 10, previousQuestionIds = [] } = await req.json();
+    const { category, difficulty, count = 10, previousQuestionIds = [], domain = "" } = await req.json();
 
     let questions: any[] = [];
 
     try {
-      const prompt = `Generate ${count} original ${difficulty} difficulty aptitude questions for the category "${category}".
-
-Categories include: logical reasoning, quantitative aptitude, analytical thinking, pattern recognition, real-world problem solving.
+      const domainContext = domain ? `Domain focus: ${domain}. Include domain-relevant scenario-based, technical logic, and problem-solving questions specific to this field.` : "";
+      const prompt = `Generate ${count} original ${difficulty} difficulty aptitude questions.
+${domainContext}
+Category: "${category}" (logical reasoning, quantitative aptitude, analytical thinking, pattern recognition, real-world problem solving)
 
 Requirements:
-- Each question must be unique and challenging
-- Do NOT copy from any existing test bank
-- Include 4 options each
-- Include the correct answer index (0-3)
-- Include a brief explanation
-- Make questions progressively harder
-
-${previousQuestionIds.length > 0 ? `Avoid repeating themes from previous questions.` : ''}
+- Questions must be ORIGINAL — do not copy from any test bank
+- Each question must be domain-relevant and professionally crafted
+- Include 4 options each with only one correct answer
+- Include correct answer index (0-3)
+- Include a concise explanation
+- Mix scenario-based, analytical, and numerical question types
 
 Respond ONLY with valid JSON array:
 [

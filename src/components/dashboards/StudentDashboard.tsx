@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { FileText, Mic, BookOpen, TrendingUp, Clock, Award, Code, Brain } from "lucide-react";
+import { Award, Mic, BookOpen, Clock, Code, Brain, Trophy, FileText } from "lucide-react";
 
 export default function StudentDashboard() {
   const { user } = useAuth();
@@ -37,12 +37,12 @@ export default function StudentDashboard() {
   }, [user]);
 
   const quickActions = [
-    { to: "/resume-builder", icon: FileText, label: "Build Resume", color: "text-info" },
-    { to: "/mock-interview", icon: Mic, label: "AI Interview", color: "text-primary" },
+    { to: "/placement-certificate", icon: Award, label: "My Certificate", color: "text-primary" },
+    { to: "/mock-interview", icon: Mic, label: "AI Interview", color: "text-info" },
     { to: "/coding", icon: Code, label: "Coding Challenge", color: "text-warning" },
     { to: "/aptitude", icon: Brain, label: "Aptitude Test", color: "text-success" },
     { to: "/practice", icon: BookOpen, label: "Practice", color: "text-info" },
-    { to: "/resume-generator", icon: Award, label: "Placement Resume", color: "text-primary" },
+    { to: "/resume-generator", icon: FileText, label: "AI Resume", color: "text-primary" },
   ];
 
   return (

@@ -10,12 +10,12 @@ import { Button } from "@/components/ui/button";
 
 const studentLinks = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/resume-builder", icon: FileText, label: "Resume Builder" },
   { to: "/mock-interview", icon: Mic, label: "AI Interview" },
   { to: "/coding", icon: Code, label: "Coding Challenge" },
   { to: "/aptitude", icon: Brain, label: "Aptitude Test" },
   { to: "/practice", icon: BookOpen, label: "Practice" },
-  { to: "/resume-generator", icon: Award, label: "Placement Resume" },
+  { to: "/resume-generator", icon: FileText, label: "AI Resume" },
+  { to: "/placement-certificate", icon: Award, label: "My Certificate" },
   { to: "/profile", icon: UserCircle, label: "Profile" },
 ];
 

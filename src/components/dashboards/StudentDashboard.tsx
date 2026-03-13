@@ -37,12 +37,12 @@ export default function StudentDashboard() {
   }, [user]);
 
   const quickActions = [
-    { to: "/resume-builder", icon: FileText, label: "Build Resume", color: "text-info" },
-    { to: "/mock-interview", icon: Mic, label: "AI Interview", color: "text-primary" },
+    { to: "/placement-certificate", icon: Award, label: "My Certificate", color: "text-primary" },
+    { to: "/mock-interview", icon: Mic, label: "AI Interview", color: "text-info" },
     { to: "/coding", icon: Code, label: "Coding Challenge", color: "text-warning" },
     { to: "/aptitude", icon: Brain, label: "Aptitude Test", color: "text-success" },
     { to: "/practice", icon: BookOpen, label: "Practice", color: "text-info" },
-    { to: "/resume-generator", icon: Award, label: "Placement Resume", color: "text-primary" },
+    { to: "/resume-generator", icon: FileText, label: "AI Resume", color: "text-primary" },
   ];
 
   return (

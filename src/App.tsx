@@ -42,7 +42,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<AuthRedirect><Auth /></AuthRedirect>} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/resume-builder" element={<ProtectedRoute allowedRoles={["student"]}><ResumeBuilder /></ProtectedRoute>} />
+            <Route path="/placement-certificate" element={<ProtectedRoute allowedRoles={["student"]}><PlacementCertificate /></ProtectedRoute>} />
             <Route path="/mock-interview" element={<ProtectedRoute allowedRoles={["student"]}><MockInterview /></ProtectedRoute>} />
             <Route path="/practice" element={<ProtectedRoute allowedRoles={["student"]}><Practice /></ProtectedRoute>} />
             <Route path="/coding" element={<ProtectedRoute allowedRoles={["student"]}><CodingChallenge /></ProtectedRoute>} />

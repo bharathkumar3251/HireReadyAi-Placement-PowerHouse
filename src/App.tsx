@@ -8,7 +8,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
-import ResumeBuilder from "./pages/ResumeBuilder";
+import PlacementCertificate from "./pages/PlacementCertificate";
 import MockInterview from "./pages/MockInterview";
 import Practice from "./pages/Practice";
 import Profile from "./pages/Profile";

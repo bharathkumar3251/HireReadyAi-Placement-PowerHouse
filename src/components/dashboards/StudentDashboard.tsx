@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Award, Mic, BookOpen, Clock, Code, Brain, Trophy } from "lucide-react";
+import { Award, Mic, BookOpen, Clock, Code, Brain, Trophy, FileText } from "lucide-react";
 
 export default function StudentDashboard() {
   const { user } = useAuth();

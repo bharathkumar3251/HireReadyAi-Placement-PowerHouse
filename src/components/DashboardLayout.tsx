@@ -85,7 +85,13 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <div className="p-3 border-t border-border">
           <div className="px-3 py-2 mb-2">
             <p className="text-sm font-medium text-foreground truncate">{user?.email}</p>
-            <p className="text-xs text-muted-foreground capitalize">{role}</p>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              {role === "admin" && <Shield className="h-3 w-3 text-destructive" />}
+              <p className={`text-xs font-medium capitalize ${
+                role === "admin" ? "text-destructive" :
+                role === "recruiter" ? "text-info" : "text-primary"
+              }`}>{role}</p>
+            </div>
           </div>
           <button
             onClick={handleSignOut}

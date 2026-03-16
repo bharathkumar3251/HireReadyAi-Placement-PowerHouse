@@ -22,21 +22,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<AppRole | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchRole = async (userId: string) => {
+  const fetchRole = async (userId: string): Promise<AppRole | null> => {
     const { data } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", userId)
       .single();
-    if (data) setRole(data.role);
+    if (data) {
+      setRole(data.role as AppRole);
+      return data.role as AppRole;
+    }
+    return null;
   };
 
   useEffect(() => {
+    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
+          // Use setTimeout to avoid Supabase deadlock
           setTimeout(() => fetchRole(session.user.id), 0);
         } else {
           setRole(null);
@@ -45,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
+    // Then get current session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -57,7 +64,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string, selectedRole: AppRole = "student") => {
+  const signUp = async (
+    email: string,
+    password: string,
+    fullName: string,
+    selectedRole: AppRole = "student"
+  ) => {
     const { error, data } = await supabase.auth.signUp({
       email,
       password,
@@ -67,20 +79,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
     });
     if (error) throw error;
-    // If a non-student role is selected, update the role after signup
-    if (selectedRole !== "student" && data.user) {
-      // The trigger creates a student role by default. Update it.
-      await supabase
-        .from("user_roles")
-        .update({ role: selectedRole })
-        .eq("user_id", data.user.id);
-      setRole(selectedRole);
+
+    if (data.user) {
+      // The DB trigger creates a 'student' role row automatically.
+      // If a different role was selected, update it.
+      if (selectedRole !== "student") {
+        // Retry up to 5 times to handle timing with the trigger
+        let updated = false;
+        for (let i = 0; i < 5; i++) {
+          await new Promise(r => setTimeout(r, 300));
+          const { error: updateError } = await supabase
+            .from("user_roles")
+            .update({ role: selectedRole })
+            .eq("user_id", data.user.id);
+          if (!updateError) {
+            updated = true;
+            break;
+          }
+        }
+        if (updated) {
+          setRole(selectedRole);
+        }
+      } else {
+        setRole("student");
+      }
     }
   };
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
+    // Role will be fetched automatically via onAuthStateChange
   };
 
   const signOut = async () => {

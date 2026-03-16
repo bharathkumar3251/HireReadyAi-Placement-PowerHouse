@@ -3,8 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   Zap, LayoutDashboard, FileText, Mic, BookOpen, Briefcase, Users,
-  Settings, LogOut, Menu, X, ChevronRight, BarChart3, UserCircle,
-  Code, Brain, Award
+  Settings, LogOut, Menu, ChevronRight, BarChart3, UserCircle,
+  Code, Brain, Award, GraduationCap, Shield
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -20,16 +20,16 @@ const studentLinks = [
 ];
 
 const recruiterLinks = [
-  { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/recruiter/students", icon: Users, label: "Students" },
+  { to: "/dashboard", icon: LayoutDashboard, label: "Recruiter Dashboard" },
+  { to: "/recruiter/students", icon: Users, label: "Candidate List" },
   { to: "/recruiter/jobs", icon: Briefcase, label: "Job Listings" },
   { to: "/profile", icon: UserCircle, label: "Profile" },
 ];
 
 const adminLinks = [
-  { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/admin/users", icon: Users, label: "Users" },
-  { to: "/admin/analytics", icon: BarChart3, label: "Analytics" },
+  { to: "/dashboard", icon: LayoutDashboard, label: "Admin Dashboard" },
+  { to: "/admin/users", icon: GraduationCap, label: "Student Performance" },
+  { to: "/admin/analytics", icon: BarChart3, label: "Placement Analytics" },
   { to: "/admin/settings", icon: Settings, label: "Settings" },
 ];
 
